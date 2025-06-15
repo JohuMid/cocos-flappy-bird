@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node,UITransform } from 'cc';
 import { GameManager } from './GameManager';
 const { ccclass, property } = _decorator;
 
@@ -6,14 +6,25 @@ const { ccclass, property } = _decorator;
 export class Pipe extends Component {
 
     @property
-    private moveSpeed = 100;
+    private moveSpeed = 150;
+
+    @property
+    createTime:number = 1;
+
     start() {
-        this.moveSpeed = GameManager.inst().moveSpeed;
+        // node的y设置到-300到正300之间
+        const randomY = Math.random() * 600 - 300;
+        this.node.setPosition(this.node.position.x, randomY);
     }
 
     update(deltaTime: number) {
         const p =this.node.position;
         this.node.setPosition(p.x - this.moveSpeed *deltaTime, p.y);
+
+        // 超出屏幕，销毁管道
+        if (this.node.position.x < (-730)) {
+            this.node.destroy();
+        }
     }
 }
 

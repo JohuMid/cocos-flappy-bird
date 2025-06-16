@@ -1,16 +1,25 @@
-import { _decorator, Component, ERigidBody2DType, input, Input, Node, RigidBody2D, Vec2 } from 'cc';
+import { _decorator, Collider2D, Component, Contact2DType, ERigidBody2DType, input, Input, IPhysics2DContact, Node, RigidBody2D, Vec2 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
 export class Player extends Component {
 
     private rigidBody: RigidBody2D = null;
+
+    // 小鸟的旋转角度
+    @property
+    private rotateSpeed: number = 60;
+
     protected onLoad(): void {
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
     }
 
     onDestroy() {
         input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+        let collider = this.getComponent(Collider2D);
+        if (collider) {
+            collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        }
     }
 
     onTouchStart(){
@@ -19,13 +28,31 @@ export class Player extends Component {
         if (rigidBody) {
             rigidBody.linearVelocity = new Vec2(0, 10);
         }
+        // 点击后，给节点一个旋转角度
+        this.node.angle = this.rotateSpeed;
+
     }
 
     start() {
-        
+        // 注册单个碰撞体的回调函数
+        let collider = this.getComponent(Collider2D);
+        if (collider) {
+            collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        }
+    }
+    
+    onBeginContact (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        // 只在两个碰撞体开始接触时被调用一次
+        console.log(otherCollider.tag);
     }
 
     update(deltaTime: number) {
+        // 小鸟的旋转角度
+        this.node.angle -= deltaTime * this.rotateSpeed;
+        if (this.node.angle < -60) {
+            this.node.angle = -60;
+        }
+        
     }
 }
 

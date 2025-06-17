@@ -1,4 +1,6 @@
 import { _decorator, Collider2D, Component, Contact2DType, ERigidBody2DType, input, Input, Animation, IPhysics2DContact, Node, RigidBody2D, Vec2 } from 'cc';
+import { Tags } from './Tags';
+import { GameManager } from './GameManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -44,6 +46,7 @@ export class Player extends Component {
         let collider = this.getComponent(Collider2D);
         if (collider) {
             collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+            collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
         }
     }
 
@@ -75,7 +78,19 @@ export class Player extends Component {
     onBeginContact (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         // 只在两个碰撞体开始接触时被调用一次
         console.log(otherCollider.tag);
+        if (otherCollider.tag == Tags.PIPE || otherCollider.tag == Tags.LAND) {
+            GameManager.inst().transitionToGameOver();
+        }
     }
+
+    onEndContact (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        // 只在两个碰撞体结束接触时被调用一次
+        console.log(otherCollider.tag);
+        if (otherCollider.tag == Tags.PIPE_MIDDLE) {
+            GameManager.inst().addScore();
+        }
+    }
+
 
     update(deltaTime: number) {
         if (!this._canControl) {

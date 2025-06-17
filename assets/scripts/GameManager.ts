@@ -3,6 +3,8 @@ const { ccclass, property } = _decorator;
 
 import { Player } from './Player';
 import { MoveBg } from './MoveBg';
+import { PipeManager } from './PipeManager';
+import { GameReadyUI } from './UI/GameReadyUI';
 
 enum GameState {
     Ready,
@@ -29,6 +31,12 @@ export class GameManager extends Component {
 
     curGS: GameState = GameState.Ready
 
+    @property({ type: PipeManager })
+    pipeSpawner: PipeManager = null;
+
+    @property({type:GameReadyUI})
+    gameReadyUI:GameReadyUI = null;
+
     protected onLoad(): void {
         GameManager._inst = this;
     }
@@ -37,9 +45,15 @@ export class GameManager extends Component {
         this.bird.disableControl()
         this.bgMoving.disableMoving();
         this.landMoving.disableMoving();
+        this.pipeSpawner.pause()
     }
     transitionToGaming() {
         this.curGS = GameState.Gaming;
+        this.bird.enableControl()
+        this.bgMoving.enableMoving();
+        this.landMoving.enableMoving();
+        this.pipeSpawner.play()
+        this.gameReadyUI.node.active = false;
     }
     transitionToGameOver() {
         this.curGS = GameState.GameOver;

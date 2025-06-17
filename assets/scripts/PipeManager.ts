@@ -9,12 +9,18 @@ export class PipeManager extends Component {
     @property
     private spawnRate:number = 2;
 
-    private timer: number = 0
+    private timer: number = 2
+
+    private isSpawning: boolean = false;
+
     start() {
 
     }
 
     update(deltaTime: number) {
+        if (!this.isSpawning) {
+            return
+        }
         this.timer += deltaTime;
         if (this.timer > this.spawnRate) {
             this.timer = 0;
@@ -27,6 +33,14 @@ export class PipeManager extends Component {
             const randomY = Math.random() * 200 - 100;
             pipe.setPosition(pipe.position.x, randomY);
         }
+    }
+
+    public pause(){
+        this.isSpawning = false
+    }
+    public play(){
+        this.isSpawning = true
+
     }
 }
 

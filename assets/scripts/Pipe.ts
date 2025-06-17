@@ -8,8 +8,6 @@ export class Pipe extends Component {
     @property
     private moveSpeed = 150;
 
-    @property
-    createTime:number = 1;
 
     start() {
         // node的y设置到-300到正300之间

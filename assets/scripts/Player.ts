@@ -54,7 +54,7 @@ export class Player extends Component {
         this._canControl = true;
         // 启用刚体组件
         if (this.rigidBody) {
-            this.rigidBody.type = ERigidBody2DType.Dynamic;
+            this.rigidBody.enabled = true;
         }
         // 启用动画
         let anim = this.getComponent(Animation);
@@ -66,13 +66,22 @@ export class Player extends Component {
         this._canControl = false;
         // 禁用刚体组件
         if (this.rigidBody) {
-            this.rigidBody.type = ERigidBody2DType.Static;
+            this.rigidBody.enabled = false;
         }
+
         // 禁用动画
         let anim = this.getComponent(Animation);
         if (anim) {
             anim.enabled = false;
         }
+    }
+
+    public disableControlNotRigidBody(){
+        let anim = this.getComponent(Animation);
+        if (anim) {
+            anim.enabled = false;
+        }
+        this._canControl = false;
     }
     
     onBeginContact (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {

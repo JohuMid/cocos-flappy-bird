@@ -2190,6 +2190,15 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "curScoreLabel": {
+      "__id__": 88
+    },
+    "bestScoreLabel": {
+      "__id__": 91
+    },
+    "newSprite": {
+      "__id__": 92
+    },
     "_id": "77RH5DgO9KSLtm1JyLU7ur"
   },
   {

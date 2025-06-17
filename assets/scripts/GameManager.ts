@@ -73,7 +73,7 @@ export class GameManager extends Component {
     transitionToGameOver() {
         this.curGS = GameState.GameOver;
 
-        this.bird.disableControl()
+        this.bird.disableControlNotRigidBody()
         this.bgMoving.disableMoving();
         this.landMoving.disableMoving();
         this.pipeSpawner.pause()

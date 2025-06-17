@@ -1,13 +1,14 @@
 import { _decorator, Component, Node, Prefab, instantiate } from 'cc';
+import { Pipe } from './Pipe';
 const { ccclass, property } = _decorator;
 
 @ccclass('PipeManager')
 export class PipeManager extends Component {
 
-    @property({type:Prefab})
+    @property({ type: Prefab })
     pipePrefab: Prefab = null;
     @property
-    private spawnRate:number = 2;
+    private spawnRate: number = 2;
 
     private timer: number = 2
 
@@ -35,10 +36,19 @@ export class PipeManager extends Component {
         }
     }
 
-    public pause(){
+    public pause() {
         this.isSpawning = false
+
+        const nodeArr = this.node.children
+
+        for (let i = 0; i < nodeArr.length; i++) {
+            const pipe = nodeArr[i].getComponent(Pipe)
+            if (pipe) {
+                pipe.enabled = false;
+            }
+        }
     }
-    public play(){
+    public play() {
         this.isSpawning = true
 
     }

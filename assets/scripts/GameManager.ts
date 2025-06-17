@@ -71,6 +71,9 @@ export class GameManager extends Component {
         this.gameOverUI.hide();
     }
     transitionToGameOver() {
+        if (this.curGS ==GameState.GameOver) {
+            return;
+        }
         this.curGS = GameState.GameOver;
 
         this.bird.disableControlNotRigidBody()
@@ -80,7 +83,8 @@ export class GameManager extends Component {
         this.gameReadyUI.node.active = false;
         this.gamingUI.active = false;
 
-        this.gameOverUI.show(0,0);
+        this.gameOverUI.show(GameData.getScore(),GameData.getBestScore());
+        GameData.saveScore();
     }
     start() {
         this.transitionToReady();
